@@ -1,0 +1,10 @@
+{application, eip_erlang, [
+    {description, "desc"},
+    {vsn, git},
+    {mod, {eip_erlang_app, []}},
+    {applications, [
+        kernel,
+        stdlib,
+        lager
+    ]}
+]}.

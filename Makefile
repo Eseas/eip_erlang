@@ -15,7 +15,7 @@
 #\--------------------------------------------------------------------
 
 REBAR=rebar
-APP_NAME=sim
+APP_NAME=eip_erlang
 
 all: compile-all
 

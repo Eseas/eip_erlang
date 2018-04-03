@@ -6,7 +6,7 @@
 %%% @end
 %%% Created : 18. Jan 2018 18.38
 %%%-------------------------------------------------------------------
--module(sim_channel).
+-module(eip_erlang_endpoint).
 -author("kazimieras").
 
 %% API

@@ -1,5 +1,5 @@
 %/--------------------------------------------------------------------
-%| Copyright 2015-2016 Erisata, UAB (Ltd.)
+%| Copyright 2015 Erisata, UAB (Ltd.)
 %|
 %| Licensed under the Apache License, Version 2.0 (the "License");
 %| you may not use this file except in compliance with the License.
@@ -15,48 +15,46 @@
 %\--------------------------------------------------------------------
 
 %%%
-%%% OTP Application module for axb_core.
+%%% Main supervisor.
 %%%
--module(eip_erlang_app).
--behaviour(application).
+-module(eip_sup).
+-behaviour(supervisor).
 -compile([{parse_transform, lager_transform}]).
--export([get_env/1, get_env/2]).
--export([start/2, stop/1]).
-
--define(APP, eip_erlang).
+-export([start_link/0]).
+-export([init/1]).
 
 
 %%% ============================================================================
-%%% Public API.
-%%% ============================================================================
-
-
-get_env(Name) ->
-    application:get_env(?APP, Name).
-
-
-get_env(Name, Default) ->
-    application:get_env(?APP, Name, Default).
-
-
-
-%%% ============================================================================
-%%% Application callbacks
+%%% API functions.
 %%% ============================================================================
 
 
 %%
-%% Start the application.
+%%  Create this supervisor.
 %%
-start(_StartType, _StartArgs) ->
-    eip_erlang_sup:start_link().
+start_link() ->
+    supervisor:start_link({local, ?MODULE}, ?MODULE, {}).
+
+
+
+%%% ============================================================================
+%%% Callbacks for supervisor.
+%%% ============================================================================
 
 
 %%
-%% Stop the application.
+%%  Supervisor initialization.
 %%
-stop(_Param) ->
-
-    ok.
+init({}) ->
+    EshopSpec = {sim_endpoint_eshop,
+        {sim_endpoint_eshop, start_link, []},
+        permanent,
+        5000, % Shutdown time
+        worker,
+        [sim_endpoint_eshop]
+    },
+    {ok, {{one_for_all, 10, 10000}, [
+            EshopSpec
+            ]}}.
 
 

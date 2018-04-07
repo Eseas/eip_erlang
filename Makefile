@@ -15,7 +15,7 @@
 #\--------------------------------------------------------------------
 
 REBAR=rebar
-APP_NAME=eip_erlang
+APP_NAME=eip
 
 all: compile-all
 

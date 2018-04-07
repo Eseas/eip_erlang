@@ -1,5 +1,5 @@
 %/--------------------------------------------------------------------
-%| Copyright 2015 Erisata, UAB (Ltd.)
+%| Copyright 2015-2016 Erisata, UAB (Ltd.)
 %|
 %| Licensed under the Apache License, Version 2.0 (the "License");
 %| you may not use this file except in compliance with the License.
@@ -15,46 +15,48 @@
 %\--------------------------------------------------------------------
 
 %%%
-%%% Main supervisor.
+%%% OTP Application module for axb_core.
 %%%
--module(eip_erlang_sup).
--behaviour(supervisor).
+-module(eip_app).
+-behaviour(application).
 -compile([{parse_transform, lager_transform}]).
--export([start_link/0]).
--export([init/1]).
+-export([get_env/1, get_env/2]).
+-export([start/2, stop/1]).
+
+-define(APP, eip).
 
 
 %%% ============================================================================
-%%% API functions.
+%%% Public API.
+%%% ============================================================================
+
+
+get_env(Name) ->
+    application:get_env(?APP, Name).
+
+
+get_env(Name, Default) ->
+    application:get_env(?APP, Name, Default).
+
+
+
+%%% ============================================================================
+%%% Application callbacks
 %%% ============================================================================
 
 
 %%
-%%  Create this supervisor.
+%% Start the application.
 %%
-start_link() ->
-    supervisor:start_link({local, ?MODULE}, ?MODULE, {}).
-
-
-
-%%% ============================================================================
-%%% Callbacks for supervisor.
-%%% ============================================================================
+start(_StartType, _StartArgs) ->
+    eip_sup:start_link().
 
 
 %%
-%%  Supervisor initialization.
+%% Stop the application.
 %%
-init({}) ->
-    EshopSpec = {sim_endpoint_eshop,
-        {sim_endpoint_eshop, start_link, []},
-        permanent,
-        5000, % Shutdown time
-        worker,
-        [sim_endpoint_eshop]
-    },
-    {ok, {{one_for_all, 10, 10000}, [
-            EshopSpec
-            ]}}.
+stop(_Param) ->
+
+    ok.
 
 

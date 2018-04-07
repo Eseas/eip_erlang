@@ -1,7 +1,7 @@
-{application, eip_erlang, [
+{application, eip, [
     {description, "desc"},
     {vsn, git},
-    {mod, {eip_erlang_app, []}},
+    {mod, {eip_app, []}},
     {applications, [
         kernel,
         stdlib,

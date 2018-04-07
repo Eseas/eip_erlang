@@ -6,7 +6,7 @@
 %%% @end
 %%% Created : 18. Jan 2018 18.38
 %%%-------------------------------------------------------------------
--module(eip_erlang_channel_sup).
+-module(eip_channel_sup).
 -author("kazimieras").
 
 %% API

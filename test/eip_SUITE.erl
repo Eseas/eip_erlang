@@ -17,7 +17,7 @@
 %%%
 %%% Common Tests for `sim' application.
 %%%
--module(eip_erlang_SUITE).
+-module(eip_SUITE).
 -compile([{parse_transform, lager_transform}]).
 -export([
     all/0,
@@ -30,7 +30,7 @@
     test_integration/1
 ]).
 
--define(APP, eip_erlang).
+-define(APP, eip).
 
 %%% ============================================================================
 %%% Callbacks for `common_test'
@@ -50,8 +50,8 @@ all() -> [
 init_per_suite(Config) ->
     application:load(lager),
 %    application:set_env(lager, handlers, [{lager_console_backend, debug}]),
-    {ok, Apps} = application:ensure_all_started(eip_erlang),
-    [{eip_erlang_apps, Apps} | Config].
+    {ok, Apps} = application:ensure_all_started(eip),
+    [{eip_apps, Apps} | Config].
 
 
 %%
@@ -60,7 +60,7 @@ init_per_suite(Config) ->
 end_per_suite(Config) ->
     ok = lists:foreach(
         fun (A) -> application:stop(A) end,
-        proplists:get_value(eip_erlang_apps, Config)
+        proplists:get_value(eip_apps, Config)
     ),
     ok.
 
@@ -91,16 +91,19 @@ end_per_testcase(TestCase, _Config) ->
 %%
 test_integration(_Config) ->
 %   start platform with its supervisor
-%   {ok, Platform} = eip_erlang_platform:start_link(),
+%   {ok, Platform} = eip_platform:start_link(),
 
-%   {ok, Endpoint1} = eip_erlang_endpoint:start_link(Platform, endpoint1),
-%   {ok, Endpoint2} = eip_erlang_endpoint:start_link(Platform, endpoint2),
+%   {ok, Endpoint1} = eip_endpoint:start_link(Platform, endpoint1),
+%   {ok, Endpoint2} = eip_endpoint:start_link(Platform, endpoint2),
 
 
 %   This should be in endpoint
-%   {ok, Channel} = eip_erlang_channel:start_link(Platform, channel),
+%   {ok, Channel} = eip_channel:start_link(Platform, channel),
 
 
+    {ok, EndpointPid} = eip_itest_endpoint:start_link(),
+
+    eip_itest_endpoint:send_message(),
 
 
 %    {ok, _WarehouseChannelPid} = sim_warehouse_channel:start_link(),
@@ -112,6 +115,6 @@ test_integration(_Config) ->
 %    ok = sim_eshop_endpoint:send([order1, order2]),
 %    timer:sleep(50),
 
-    1 = 0, %% To see lager logs
+%    1 = 0, %% To see lager logs
     ok.
 
